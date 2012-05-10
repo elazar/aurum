@@ -4,9 +4,7 @@ import inspect
 from cmd import Cmd
 import readline
 
-from .commands import Command
-from .context import Context
-from .config import Config
+from aurum import command, context, config
 
 class CommandModuleMissingClassError(Exception):
     def __init__(self, command):
@@ -29,9 +27,9 @@ class Shell(Cmd):
     def __init__(self):
         Cmd.__init__(self)
 
-        self.context = Context()
+        self.context = context.Context()
 
-        self.config = Config()
+        self.config = config.Config()
         self.prompt = self.config.prompt
 
     def default(self, line):
@@ -41,26 +39,29 @@ class Shell(Cmd):
         if not name.startswith("do_"):
             raise AttributeError
 
-        command = name.replace("do_", "", 1)
-        commands_path = join(dirname(abspath(__file__)), "commands")
-        module_found = False
-        for importer, module, _ in pkgutil.iter_modules([commands_path]):
-            if module == command:
-                module_found = True
-                break
-        if not module_found:
-            raise AttributeError
+        try:
+            command_name = name.replace("do_", "", 1)
+            commands_path = join(dirname(abspath(__file__)), "commands")
+            module_found = False
+            for importer, module, _ in pkgutil.iter_modules([commands_path]):
+                if module == command_name:
+                    module_found = True
+                    break
+            if not module_found:
+                raise AttributeError
 
-        fullname = "aurum.commands." + command
-        loader = importer.find_module(fullname)
-        command_module = loader.load_module(fullname)
-        command_class_name = command.capitalize()
-        command_class = getattr(command_module, command_class_name)
-        if command_class == None:
-            raise CommandModuleMissingClassError(command)
-        if not Command in inspect.getmro(command_class):
-            raise CommandClassMissingBaseClass(command)
+            fullname = "aurum.commands." + command_name
+            loader = importer.find_module(fullname)
+            command_module = loader.load_module(fullname)
+            command_class_name = command_name.capitalize()
+            command_class = getattr(command_module, command_class_name)
+            if command_class == None:
+                raise CommandModuleMissingClassError(command_name)
+            if not command.Command in inspect.getmro(command_class):
+                raise CommandClassMissingBaseClass(command_name)
 
-        command_instance = command_class(self.config, self.context)
-        context_method = "do_" + self.context.get_type()
-        return getattr(command_instance, context_method)
+            command_instance = command_class(self.config, self.context)
+            context_method = "do_" + self.context.get_type()
+            return getattr(command_instance, context_method)
+        except Exception as msg:
+            print msg
