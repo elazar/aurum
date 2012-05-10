@@ -33,23 +33,23 @@ class Shell(Cmd):
         self.prompt = self.config.prompt
 
     def default(self, line):
-        print 'aurum: Unknown syntax: %s' % (line)
+        print "aurum: Unknown syntax: %s" % (line)
 
     def __getattr__(self, name):
         if not name.startswith("do_"):
             raise AttributeError
 
-        try:
-            command_name = name.replace("do_", "", 1)
-            commands_path = join(dirname(abspath(__file__)), "commands")
-            module_found = False
-            for importer, module, _ in pkgutil.iter_modules([commands_path]):
-                if module == command_name:
-                    module_found = True
-                    break
-            if not module_found:
-                raise AttributeError
+        command_name = name.replace("do_", "", 1)
+        commands_path = join(dirname(abspath(__file__)), "commands")
+        module_found = False
+        for importer, module, _ in pkgutil.iter_modules([commands_path]):
+            if module == command_name:
+                module_found = True
+                break
+        if not module_found:
+            raise AttributeError
 
+        try:
             fullname = "aurum.commands." + command_name
             loader = importer.find_module(fullname)
             command_module = loader.load_module(fullname)
@@ -64,4 +64,5 @@ class Shell(Cmd):
             context_method = "do_" + self.context.get_type()
             return getattr(command_instance, context_method)
         except Exception as msg:
-            print msg
+            print "aurum: " + str(msg)
+            raise AttributeError
