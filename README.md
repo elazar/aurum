@@ -26,15 +26,15 @@ the sections and settings that are currently supported.
 The `prompt` setting is similar in concept to the `$PSO` variable of bash, but
 currenty only supports string literals.
 
-Each line in the `[dsn]` section provides a [DSN](http://en.wikipedia.org/wiki/Data_Source_Name) for a particular 
+Each line in the `[dsn]` section provides a [DSN](http://en.wikipedia.org/wiki/Data_Source_Name) for a particular
 server and database with a shorthand name for later reference.
 
 # Usage
 
 For now, clone the repo and execute `./bin/aurum` with no arguments.
 Eventually, this will support specifying a DSN name to automatically connect to
-it. This will place you in the "root" from which you can list available DSNs and 
-their subentities using the `ls` command and eventually you'll be able to navigate 
+it. This will place you in the "root" from which you can list available DSNs and
+their subentities using the `ls` command and eventually you'll be able to navigate
 between them using the `cd` command.
 
 # Development
@@ -42,14 +42,14 @@ between them using the `cd` command.
 Commands exist as classes in `lib/aurum/commands` that extend from
 `aurum.commands.Command` and implement any of its `do_*` methods, which
 represent particular contexts in which the command can be invoked such as when
-no DSN is active or when a specific DSN, database, table, or column is active. 
+no DSN is active or when a specific DSN, database, table, or column is active.
 
 A `do_all` method is also supported, which is executed if it exists when none
 of the other `do_*` methods declared by `Command` are overridden. This is
 useful when the command operation does not vary based on the context.
 
 Note: These `do_*` methods are processed like those of any
-[Cmd](http://docs.python.org/library/cmd.html) subclass. Specifically, if 
+[Cmd](http://docs.python.org/library/cmd.html) subclass. Specifically, if
 they return a `True` value, the shell will terminate. The base `Command` class
 and `exit.Exit` Command subclass are good examples of this behavior being used.
 
