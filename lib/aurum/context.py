@@ -18,9 +18,8 @@ class Context:
             return "global"
         if self.database == None:
             return "server"
-        elif self.table == None:
+        if self.table == None:
             return "database"
-        elif self.column == None:
+        if self.column == None:
             return "table"
-        else:
-            return "column"
+        return "column"
