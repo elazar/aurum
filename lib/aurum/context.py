@@ -4,6 +4,7 @@ class Context:
     table = None
     column = None
     engine = None
+    inspector = None
 
     def get_identifier(self):
         return next(identifier for identifier in (
