@@ -1,13 +1,14 @@
-import types
-
 class Command:
     def __init__(self, config, context):
         self.config = config
         self.context = context
 
     def _unsupported(self, params):
-        if (type(getattr(self, 'do_all')) == types.MethodType):
+        try:
             return self.do_all(params)
+        except AttributeError:
+            pass
+
         class_name = self.__class__.__name__
         module_name = class_name.lower()
         print "aurum: Class aurum.commands.%s.%s does not support context %s" % (module_name, class_name, self.context.get_type())
