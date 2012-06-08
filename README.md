@@ -5,6 +5,10 @@ concise alternative to SQL for common database tasks.
 
 # Requirements
 
+It's possible that aurum will work with versions preceding those listed below,
+but they are the ones I've tested it with. I'll consider patches to allow it to
+function on older versions within reason.
+
 * Python 2.7.2+
 * SQLAlchemy 0.7.6+
 
@@ -46,7 +50,7 @@ useful when the command operation does not vary based on the context.
 Note: These `do_*` methods are processed like those of any
 [Cmd](http://docs.python.org/library/cmd.html) subclass. Specifically, if 
 they return a `True` value, the shell will terminate. The base `Command` class
-and `exit` Command subclass are good examples of this behavior being used.
+and `exit.Exit` Command subclass are good examples of this behavior being used.
 
 # FAQ
 
