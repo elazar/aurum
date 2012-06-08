@@ -33,8 +33,9 @@ server and database with a shorthand name for later reference.
 
 For now, clone the repo and execute `./bin/aurum` with no arguments.
 Eventually, this will support specifying a DSN name to automatically connect to
-it. This will place you in the "root" from which you'll eventually be able to
-list available DSNs and their subentities and navigate between them.
+it. This will place you in the "root" from which you can list available DSNs and 
+their subentities using the `ls` command and eventually you'll be able to navigate 
+between them using the `cd` command.
 
 # Development
 
