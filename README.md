@@ -11,6 +11,7 @@ function on older versions within reason.
 
 * Python 2.7.2+
 * SQLAlchemy 0.7.6+
+* A [supported database server](http://docs.sqlalchemy.org/en/rel_0_7/core/engines.html#supported-dbapis) and corresponding Python driver
 
 # Configuration
 
@@ -18,10 +19,10 @@ The `aurum` executable will look for configuration file at `~/.aurum`. Here are
 the sections and settings that are currently supported.
 
     [general]
-    prompt = "aurum> "
+    prompt = aurum> 
 
     [dsn]
-    name = "protocol://username:password@host/database"
+    name = protocol://username:password@host/database
 
 The `prompt` setting is similar in concept to the `$PSO` variable of bash, but
 currenty only supports string literals.
