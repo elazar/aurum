@@ -6,6 +6,12 @@ import readline
 
 from aurum import command, context, config
 
+class MissingDependencyError(Exception):
+    def __init__(self, dependency):
+        self.dependency = dependency
+    def __str__(self):
+        return "dependency '%s' is missing" % (self.dependency)
+
 class CommandModuleMissingClassError(Exception):
     def __init__(self, command):
         self.command = command
@@ -26,6 +32,11 @@ class Shell(Cmd):
 
     def __init__(self):
         Cmd.__init__(self)
+
+        try:
+            import sqlalchemy
+        except ImportError:
+            raise MissingDependencyError("sqlalchemy")
 
         self.context = context.Context()
 
