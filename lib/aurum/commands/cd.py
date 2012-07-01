@@ -36,22 +36,25 @@ class Cd(command.Command):
                 return
             self.context.dsn = dsn
             self.context.engine = create_engine(self.config.dsn[dsn])
-            self.context.inspector = reflection.Inspector.from_engine(self.context.engine)
+            self.context.inspector = inspector = reflection.Inspector.from_engine(self.context.engine)
 
             # Handle the database
             parsed_dsn = make_url(self.config.dsn[dsn])
             database = parsed_dsn.database
             if database == None:
-                databases = self.context.inspector.get_schema_names()
+                databases = inspector.get_schema_names()
                 database = segments.pop(0)
                 if database not in databases:
                     print "aurum: Database not found in DSN " + dsn + ": " + database + "..."
                     return
+            elif len(segments) > 0:
+                segments.pop(0)
             self.context.database = database
 
             # Handle the table
             table = segments.pop(0)
-            tables = self.context.inspector.get_table_names(database)
+            tables = inspector.get_table_names(database) + inspector.get_view_names(database)
+            tables.sort()
             if table not in tables:
                 print "aurum: Table not found in database " + database + ": " + table + "..."
                 return
@@ -59,7 +62,7 @@ class Cd(command.Command):
 
             # Handle the column
             column = segments.pop(0)
-            columns = [column.name for column in self.context.inspector.get_columns(table, database)]
+            columns = [column["name"] for column in inspector.get_columns(table, database)]
             if column not in columns:
                 print "aurum: Column not found in table " + table + ": " + column + "..."
                 return
